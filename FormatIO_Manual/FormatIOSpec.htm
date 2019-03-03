@@ -1,0 +1,306 @@
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=windows-1252">
+<META NAME="Generator" CONTENT="Microsoft Word 97">
+<TITLE>FormatIO</TITLE>
+</HEAD>
+<BODY>
+
+<H2 ALIGN="CENTER">FormatIO</H2>
+<H2 ALIGN="CENTER">Classes to Support Formatted Input and Output</H2>
+<FONT SIZE=2><P ALIGN="JUSTIFY"></P>
+</FONT><FONT SIZE=4><P ALIGN="CENTER">Ron Poet. (ron@dcs.gla.ac.uk)</P>
+</FONT><FONT SIZE=2><P ALIGN="JUSTIFY"></P>
+<P ALIGN="JUSTIFY">These classes are designed to enable formatted items such as numbers and words to be read from various input sources and written to a variety of output destinations from Java programs. The initial driving force behind their creation was support for Java as a language for the initial teaching of programming, but they can be used in any situation where sequential input and output is desirable. One obvious application is in unit testing of the non-visual parts of programs, where sequential test data, provided in a file, is superior to non-sequential test data provided interactively.</P>
+<P ALIGN="JUSTIFY"></P>
+<P ALIGN="JUSTIFY">The </FONT><FONT FACE="Courier New" SIZE=2>FormatIO</FONT><FONT SIZE=2> package defined two interfaces: </FONT><FONT FACE="Courier New" SIZE=2>FormatInput</FONT><FONT SIZE=2> and </FONT><FONT FACE="Courier New" SIZE=2>FormatOutput</FONT><FONT SIZE=2>, together with seven different concrete objects which support these interfaces: </FONT><FONT FACE="Courier New" SIZE=2>Console</FONT><FONT SIZE=2>, </FONT><FONT FACE="Courier New" SIZE=2>FileIn</FONT><FONT SIZE=2>, </FONT><FONT FACE="Courier New" SIZE=2>FileOut</FONT><FONT SIZE=2>, </FONT><FONT FACE="Courier New" SIZE=2>StandardIn</FONT><FONT SIZE=2>, </FONT><FONT FACE="Courier New" SIZE=2>StandardOut</FONT><FONT SIZE=2>, </FONT><FONT FACE="Courier New" SIZE=2>StringIn</FONT><FONT SIZE=2> and </FONT><FONT FACE="Courier New" SIZE=2>StringOut</FONT><FONT SIZE=2>.</P>
+<P ALIGN="JUSTIFY">&nbsp;</P>
+</FONT><H2 ALIGN="CENTER">Console</H2>
+<FONT SIZE=2><P ALIGN="JUSTIFY"></P>
+<P ALIGN="JUSTIFY">This class provides a console window that can be written too and read from using </FONT><FONT FACE="Courier New" SIZE=2>FormatOutput</FONT><FONT SIZE=2> and </FONT><FONT FACE="Courier New" SIZE=2>FormatInput</FONT><FONT SIZE=2>.  Here is a screen shot of a </FONT><FONT FACE="Courier New" SIZE=2>Console</FONT><FONT SIZE=2> object:</P>
+<P ALIGN="JUSTIFY"></P>
+</FONT><FONT FACE="Courier New" SIZE=2><P ALIGN="JUSTIFY"><IMG SRC="Image1.gif" WIDTH=310 HEIGHT=274></P>
+</FONT><FONT SIZE=2><P ALIGN="JUSTIFY"></P>
+</FONT><H3>The four buttons do the following:</H3>
+<FONT SIZE=2><P ALIGN="JUSTIFY"></P>
+<P ALIGN="JUSTIFY">Save As:&#9;&#9;Prompts for a file name, and then writes the characters to that file.</P>
+<P ALIGN="JUSTIFY">Clear:&#9;&#9;Clears the console window.</P>
+<P ALIGN="JUSTIFY">Close:&#9;&#9;Closes the window.  A program can have more than one console window.</P>
+<P ALIGN="JUSTIFY">Quit:&#9;&#9;Quits the program.</P>
+</FONT><H3></H3>
+<H3>Tabs</H3>
+<FONT SIZE=2><P ALIGN="JUSTIFY"></P>
+<P ALIGN="JUSTIFY">The tab key moves the keyboard focus from the text portion of the console window to the buttons, with each press of the tab key moving on to the next button, and eventually back to the text portion of the console.  Typing shift-tab moves the keyboard focus in the opposite direction.  If the keyboard focus is with one of the buttons, then the only keystroke that is recognised is the </FONT><FONT FACE="Courier New" SIZE=2>Space</FONT><FONT SIZE=2> key, which pushed the button, all other keystrokes being ignored.  The tab mechanism makes it possible to use the console window largely without resorting to the mouse, if desired.</P>
+<P ALIGN="JUSTIFY"></P>
+</FONT><H3>Creating a <FONT FACE="Courier New">Console</FONT> Object</H3>
+<FONT SIZE=2><P ALIGN="JUSTIFY"></P>
+<P ALIGN="JUSTIFY">A </FONT><FONT FACE="Courier New" SIZE=2>Console</FONT><FONT SIZE=2> object needs to be given a name and size (number of rows and columns) when it is created.  Default values are provided if necessary, leading to four constructors.</P>
+<P ALIGN="JUSTIFY"></P>
+</FONT><FONT FACE="Courier New" SIZE=2><P ALIGN="JUSTIFY">Console(String name, int nrows, int ncols)</P>
+<P ALIGN="JUSTIFY">Console(int nrows, int ncols)</P>
+<P ALIGN="JUSTIFY">Console(String name)</P>
+<P ALIGN="JUSTIFY">Console()</P>
+</FONT><FONT SIZE=2><P ALIGN="JUSTIFY"></P>
+<P ALIGN="JUSTIFY">Four different colours are used to distinguish the text in the Console window.</P>
+<P ALIGN="JUSTIFY"></P>
+<P ALIGN="JUSTIFY">Red:&#9;Error messages, such as the number format error illustrated.</P>
+<P ALIGN="JUSTIFY">Blue:&#9;Text typed by the user and read by the program.</P>
+<P ALIGN="JUSTIFY">Black:&#9;Text produced (written) by the program.</P><DIR>
+<DIR>
+
+<P ALIGN="JUSTIFY">Green:&#9;Prompt illustrating the position where the next user entered character will appear.  It indicates that the program is waiting for user input.</P>
+<P ALIGN="JUSTIFY"></P></DIR>
+</DIR>
+
+</FONT><H3>Error Handling</H3>
+<FONT SIZE=2><P ALIGN="JUSTIFY"></P>
+</FONT><FONT FACE="Courier New" SIZE=2><P ALIGN="JUSTIFY">Console</FONT><FONT SIZE=2> does not throw any exceptions, to make it easy to use for initial programmers.  Any errors encountered generate red error messages in the console window.  In the above example, </FONT><FONT FACE="Courier New" SIZE=2>fred</FONT><FONT SIZE=2> is not a valid real number, producing the appropriate error message.  The input is consumed in the process, and so the correct value can be entered afterwards without blocking the program.</P>
+<P ALIGN="JUSTIFY"></P>
+<P ALIGN="JUSTIFY">If a large amount of output is produced without any intervening input, then the </FONT><FONT FACE="Courier New" SIZE=2>Console</FONT><FONT SIZE=2> will stop, producing a message indicating a possible infinite loop.  The user then has the option of hitting the </FONT><FONT FACE="Courier New" SIZE=2>Quit</FONT><FONT SIZE=2> button to terminate the program or pressing E</FONT><FONT FACE="Courier New" SIZE=2>nter</FONT><FONT SIZE=2> to resume the output.</P>
+<P ALIGN="JUSTIFY"></P>
+</FONT><H3>&nbsp;</H3>
+<H3>Here is the program that produced the window above:</H3>
+<FONT SIZE=2><P ALIGN="JUSTIFY"></P>
+</FONT><FONT FACE="Courier" SIZE=1 COLOR="#008000"><P ALIGN="JUSTIFY">/*</P>
+<P ALIGN="JUSTIFY"> *&#9;TestConsole.java</P>
+<P ALIGN="JUSTIFY"> *&#9;==============</P>
+<P ALIGN="JUSTIFY"> *      Copyright (C) 1999, Ron Poet, Dept. Comp.Sci. Uni Glasgow Scotland</P>
+<P ALIGN="JUSTIFY"> *&#9;$Author: ron $</P>
+<P ALIGN="JUSTIFY"> *&#9;$Date: 1999/08/31 10:33:12 $</P>
+<P ALIGN="JUSTIFY"> *&#9;$Revision: 1.4 $</P>
+<P ALIGN="JUSTIFY"> */</P>
+</FONT><FONT FACE="Courier" SIZE=1><P ALIGN="JUSTIFY"></P>
+</FONT><FONT FACE="Courier" SIZE=1 COLOR="#0000ff"><P ALIGN="JUSTIFY">package</FONT><FONT FACE="Courier" SIZE=1>&#9;TestProg;</P>
+<P ALIGN="JUSTIFY"></P>
+</FONT><FONT FACE="Courier" SIZE=1 COLOR="#0000ff"><P ALIGN="JUSTIFY">import</FONT><FONT FACE="Courier" SIZE=1>&#9;FormatIO.*;</P>
+<P ALIGN="JUSTIFY"></P>
+</FONT><FONT FACE="Courier" SIZE=1 COLOR="#008000"><P ALIGN="JUSTIFY">/*========================*/</P>
+</FONT><FONT FACE="Courier" SIZE=1 COLOR="#0000ff"><P ALIGN="JUSTIFY">public</FONT><FONT FACE="Courier" SIZE=1>&#9;</FONT><FONT FACE="Courier" SIZE=1 COLOR="#0000ff">class</FONT><FONT FACE="Courier" SIZE=1>&#9;TestConsole</P>
+</FONT><FONT FACE="Courier" SIZE=1 COLOR="#008000"><P ALIGN="JUSTIFY">/*========================*/</P>
+</FONT><FONT FACE="Courier" SIZE=1><P ALIGN="JUSTIFY">&#9;{</P>
+<P ALIGN="JUSTIFY"></P>
+</FONT><FONT FACE="Courier" SIZE=1 COLOR="#008000"><P ALIGN="JUSTIFY">/*---------------------------------------*/</P>
+</FONT><FONT FACE="Courier" SIZE=1 COLOR="#0000ff"><P ALIGN="JUSTIFY">public</FONT><FONT FACE="Courier" SIZE=1>&#9;</FONT><FONT FACE="Courier" SIZE=1 COLOR="#0000ff">static</FONT><FONT FACE="Courier" SIZE=1>&#9;</FONT><FONT FACE="Courier" SIZE=1 COLOR="#ff0000">void</FONT><FONT FACE="Courier" SIZE=1>&#9;main(String[] arg)</P>
+</FONT><FONT FACE="Courier" SIZE=1 COLOR="#008000"><P ALIGN="JUSTIFY">/*---------------------------------------*/</P>
+</FONT><FONT FACE="Courier" SIZE=1><P ALIGN="JUSTIFY">&#9;{</P>
+<P ALIGN="JUSTIFY">&#9;Console&#9;con = </FONT><FONT FACE="Courier" SIZE=1 COLOR="#0000ff">new</FONT><FONT FACE="Courier" SIZE=1> Console(</FONT><FONT FACE="Courier" SIZE=1 COLOR="#ff0000">10</FONT><FONT FACE="Courier" SIZE=1>, </FONT><FONT FACE="Courier" SIZE=1 COLOR="#ff0000">10</FONT><FONT FACE="Courier" SIZE=1>);</P>
+<P ALIGN="JUSTIFY"></P>
+<P ALIGN="JUSTIFY">&#9;</FONT><FONT FACE="Courier" SIZE=1 COLOR="#ff0000">double</FONT><FONT FACE="Courier" SIZE=1>&#9;d = </FONT><FONT FACE="Courier" SIZE=1 COLOR="#ff0000">0</FONT><FONT FACE="Courier" SIZE=1>;</P>
+<P ALIGN="JUSTIFY">&#9;</FONT><FONT FACE="Courier" SIZE=1 COLOR="#ff0000">int</FONT><FONT FACE="Courier" SIZE=1>&#9;i = </FONT><FONT FACE="Courier" SIZE=1 COLOR="#ff0000">0</FONT><FONT FACE="Courier" SIZE=1>;</P>
+<P ALIGN="JUSTIFY">&#9;con.writeString(</FONT><FONT FACE="Courier" SIZE=1 COLOR="#ff0000">"\nType a real: "</FONT><FONT FACE="Courier" SIZE=1>);</P>
+<P ALIGN="JUSTIFY">&#9;d = con.readDouble();</P>
+<P ALIGN="JUSTIFY">&#9;con.writeString(</FONT><FONT FACE="Courier" SIZE=1 COLOR="#ff0000">"d="</FONT><FONT FACE="Courier" SIZE=1>);</P>
+<P ALIGN="JUSTIFY">&#9;con.writeDouble(d);</P>
+<P ALIGN="JUSTIFY"></P>
+<P ALIGN="JUSTIFY">&#9;con.writeString(</FONT><FONT FACE="Courier" SIZE=1 COLOR="#ff0000">"\nType a real: "</FONT><FONT FACE="Courier" SIZE=1>);</P>
+<P ALIGN="JUSTIFY">&#9;d = con.readDouble();</P>
+<P ALIGN="JUSTIFY">&#9;con.writeString(</FONT><FONT FACE="Courier" SIZE=1 COLOR="#ff0000">"d="</FONT><FONT FACE="Courier" SIZE=1>);</P>
+<P ALIGN="JUSTIFY">&#9;con.writeDouble(d);</P>
+<P ALIGN="JUSTIFY"></P>
+<P ALIGN="JUSTIFY">&#9;con.writeString(</FONT><FONT FACE="Courier" SIZE=1 COLOR="#ff0000">"\nType an int: "</FONT><FONT FACE="Courier" SIZE=1>);</P>
+<P ALIGN="JUSTIFY">&#9;i = con.readInt();</P>
+<P ALIGN="JUSTIFY">&#9;con.writeString(</FONT><FONT FACE="Courier" SIZE=1 COLOR="#ff0000">"i="</FONT><FONT FACE="Courier" SIZE=1>);</P>
+<P ALIGN="JUSTIFY">&#9;con.writeInt(i);</P>
+<P ALIGN="JUSTIFY"></P>
+<P ALIGN="JUSTIFY">&#9;con.writeString(</FONT><FONT FACE="Courier" SIZE=1 COLOR="#ff0000">"\nType an int: "</FONT><FONT FACE="Courier" SIZE=1>);</P>
+<P ALIGN="JUSTIFY">&#9;i = con.readInt();</P>
+<P ALIGN="JUSTIFY">&#9;con.writeString(</FONT><FONT FACE="Courier" SIZE=1 COLOR="#ff0000">"i="</FONT><FONT FACE="Courier" SIZE=1>);</P>
+<P ALIGN="JUSTIFY">&#9;con.writeInt(i);</P>
+</FONT><FONT FACE="Courier" SIZE=1 COLOR="#0000ff"><P ALIGN="JUSTIFY">&#9;</FONT><FONT FACE="Courier" SIZE=1>}</P>
+<P ALIGN="JUSTIFY"></P>
+<P ALIGN="JUSTIFY">&#9;}</P>
+</FONT><FONT SIZE=2><P ALIGN="JUSTIFY">&nbsp;</P>
+</FONT><H2 ALIGN="CENTER">&nbsp;</H2>
+<H2 ALIGN="CENTER">FileIn and FileOut</H2>
+<FONT SIZE=2><P ALIGN="JUSTIFY"></P>
+<P ALIGN="JUSTIFY">These two classes just provide a formatted interface to input and output files.  In each case there are two ways of creating the objects.</P>
+<P ALIGN="JUSTIFY"></P>
+<P ALIGN="JUSTIFY">Providing a name:&#9;The named file is opened.</P>
+<P ALIGN="JUSTIFY">Not providing a name:&#9;A </FONT><FONT FACE="Courier New" SIZE=2>FileDialog</FONT><FONT SIZE=2> is produced, which prompts the user for the file name.</P>
+<P ALIGN="JUSTIFY"></P>
+</FONT><FONT FACE="Courier New" SIZE=2><P ALIGN="JUSTIFY">FileIn(String name)</P>
+<P ALIGN="JUSTIFY">FileIn()</P>
+<P ALIGN="JUSTIFY"></P>
+<P ALIGN="JUSTIFY">FileOut(String name);</P>
+<P ALIGN="JUSTIFY">FileOut()</P>
+</FONT><FONT SIZE=2><P ALIGN="JUSTIFY"></P>
+<P ALIGN="JUSTIFY">Both file types should be closed when no longer needed.</P>
+<P ALIGN="JUSTIFY"></P>
+</FONT><FONT FACE="Courier New" SIZE=2><P ALIGN="JUSTIFY">void&#9;close()</P>
+</FONT><FONT SIZE=2><P ALIGN="JUSTIFY"></P>
+<P ALIGN="JUSTIFY">It is possible to reset a </FONT><FONT FACE="Courier New" SIZE=2>FileIn</FONT><FONT SIZE=2> object, which essentially closes it and opens it again.</P>
+<P ALIGN="JUSTIFY"></P>
+</FONT><FONT FACE="Courier New" SIZE=2><P ALIGN="JUSTIFY">void&#9;reset()</P>
+<P ALIGN="JUSTIFY"></P>
+</FONT><H3>Error and Exception Handling</H3>
+<FONT SIZE=2><P ALIGN="JUSTIFY"></P>
+<P ALIGN="JUSTIFY">An </FONT><FONT FACE="Courier New" SIZE=2>EofX</FONT><FONT SIZE=2> object is thrown when end of file is encountered.  This object must be caught by all code using a </FONT><FONT FACE="Courier New" SIZE=2>FileIn</FONT><FONT SIZE=2> object.</P>
+<P ALIGN="JUSTIFY"></P>
+<P ALIGN="JUSTIFY">File open errors and formatting errors produce error messages which appear on </FONT><FONT FACE="Courier New" SIZE=2>System.err</FONT><FONT SIZE=2>.</P>
+<P ALIGN="JUSTIFY"></P>
+</FONT><H3>&nbsp;</H3>
+<H3>Example using FileIn</H3>
+<FONT SIZE=2><P ALIGN="JUSTIFY"></P>
+</FONT><FONT FACE="Courier" SIZE=1 COLOR="#008000"><P ALIGN="JUSTIFY">/*</P>
+<P ALIGN="JUSTIFY"> *&#9;TestFileIn.java</P>
+<P ALIGN="JUSTIFY"> *&#9;==============</P>
+<P ALIGN="JUSTIFY"> *      Copyright (C) 1999, Ron Poet, Dept. Comp.Sci. Uni Glasgow Scotland</P>
+<P ALIGN="JUSTIFY"> *&#9;$Author: ron $</P>
+<P ALIGN="JUSTIFY"> *&#9;$Date: 1999/08/19 11:02:21 $</P>
+<P ALIGN="JUSTIFY"> *&#9;$Revision: 1.1 $</P>
+<P ALIGN="JUSTIFY"> */</P>
+</FONT><FONT FACE="Courier" SIZE=1><P ALIGN="JUSTIFY"></P>
+</FONT><FONT FACE="Courier" SIZE=1 COLOR="#0000ff"><P ALIGN="JUSTIFY">package</FONT><FONT FACE="Courier" SIZE=1> TestProg;</P>
+<P ALIGN="JUSTIFY"></P>
+</FONT><FONT FACE="Courier" SIZE=1 COLOR="#0000ff"><P ALIGN="JUSTIFY">import</FONT><FONT FACE="Courier" SIZE=1> FormatIO.*;</P>
+<P ALIGN="JUSTIFY"></P>
+</FONT><FONT FACE="Courier" SIZE=1 COLOR="#008000"><P ALIGN="JUSTIFY">/*================*/</P>
+</FONT><FONT FACE="Courier" SIZE=1 COLOR="#0000ff"><P ALIGN="JUSTIFY">class</FONT><FONT FACE="Courier" SIZE=1>   TestFileIn</P>
+</FONT><FONT FACE="Courier" SIZE=1 COLOR="#008000"><P ALIGN="JUSTIFY">/*================*/</P>
+</FONT><FONT FACE="Courier" SIZE=1><P ALIGN="JUSTIFY">        {</P>
+<P ALIGN="JUSTIFY"></P>
+</FONT><FONT FACE="Courier" SIZE=1 COLOR="#008000"><P ALIGN="JUSTIFY">/*----------------------------------------*/</P>
+</FONT><FONT FACE="Courier" SIZE=1 COLOR="#0000ff"><P ALIGN="JUSTIFY">public</FONT><FONT FACE="Courier" SIZE=1>  </FONT><FONT FACE="Courier" SIZE=1 COLOR="#0000ff">static</FONT><FONT FACE="Courier" SIZE=1>  </FONT><FONT FACE="Courier" SIZE=1 COLOR="#ff0000">void</FONT><FONT FACE="Courier" SIZE=1>    main(String args[])</P>
+</FONT><FONT FACE="Courier" SIZE=1 COLOR="#008000"><P ALIGN="JUSTIFY">/*----------------------------------------*/</P>
+</FONT><FONT FACE="Courier" SIZE=1><P ALIGN="JUSTIFY">        {</P>
+<P ALIGN="JUSTIFY">&#9;FileIn&#9;in1 = </FONT><FONT FACE="Courier" SIZE=1 COLOR="#0000ff">new</FONT><FONT FACE="Courier" SIZE=1> FileIn(</FONT><FONT FACE="Courier" SIZE=1 COLOR="#ff0000">"file_in"</FONT><FONT FACE="Courier" SIZE=1>);</P>
+<P ALIGN="JUSTIFY">&#9;read(in1);</P>
+<P ALIGN="JUSTIFY">&#9;in1.close();</P>
+<P ALIGN="JUSTIFY">&#9;FileIn&#9;in2 = </FONT><FONT FACE="Courier" SIZE=1 COLOR="#0000ff">new</FONT><FONT FACE="Courier" SIZE=1> FileIn();</P>
+<P ALIGN="JUSTIFY">&#9;read(in2);</P>
+<P ALIGN="JUSTIFY">&#9;in2.close();</P>
+<P ALIGN="JUSTIFY"></P>
+<P ALIGN="JUSTIFY">&#9;System.err.println(</FONT><FONT FACE="Courier" SIZE=1 COLOR="#ff0000">"--- Finished ---"</FONT><FONT FACE="Courier" SIZE=1>);</P>
+<P ALIGN="JUSTIFY">&#9;}</P>
+<P ALIGN="JUSTIFY"></P>
+</FONT><FONT FACE="Courier" SIZE=1 COLOR="#008000"><P ALIGN="JUSTIFY">/*-----------------------------------*/</P>
+</FONT><FONT FACE="Courier" SIZE=1 COLOR="#0000ff"><P ALIGN="JUSTIFY">private</FONT><FONT FACE="Courier" SIZE=1>&#9;</FONT><FONT FACE="Courier" SIZE=1 COLOR="#0000ff">static</FONT><FONT FACE="Courier" SIZE=1>&#9;</FONT><FONT FACE="Courier" SIZE=1 COLOR="#ff0000">void</FONT><FONT FACE="Courier" SIZE=1>&#9;read(FileIn f)</P>
+</FONT><FONT FACE="Courier" SIZE=1 COLOR="#008000"><P ALIGN="JUSTIFY">/*-----------------------------------*/</P>
+</FONT><FONT FACE="Courier" SIZE=1><P ALIGN="JUSTIFY">&#9;{</P>
+<P ALIGN="JUSTIFY">&#9;</FONT><FONT FACE="Courier" SIZE=1 COLOR="#0000ff">try</P>
+</FONT><FONT FACE="Courier" SIZE=1><P ALIGN="JUSTIFY">&#9;&#9;{</P>
+<P ALIGN="JUSTIFY">&#9;&#9;</FONT><FONT FACE="Courier" SIZE=1 COLOR="#ff0000">boolean</FONT><FONT FACE="Courier" SIZE=1>&#9;b = f.readBoolean();</P>
+<P ALIGN="JUSTIFY">&#9;&#9;String&#9;w = f.readWord();</P>
+<P ALIGN="JUSTIFY">&#9;&#9;String&#9;l1 = f.readLine();</P>
+<P ALIGN="JUSTIFY">&#9;&#9;String&#9;l2 = f.readLine();</P>
+<P ALIGN="JUSTIFY">&#9;&#9;</FONT><FONT FACE="Courier" SIZE=1 COLOR="#ff0000">double</FONT><FONT FACE="Courier" SIZE=1>&#9;d = f.readDouble();</P>
+<P ALIGN="JUSTIFY">&#9;&#9;</FONT><FONT FACE="Courier" SIZE=1 COLOR="#ff0000">int</FONT><FONT FACE="Courier" SIZE=1>&#9;i = f.readInt();</P>
+<P ALIGN="JUSTIFY">&#9;&#9;</FONT><FONT FACE="Courier" SIZE=1 COLOR="#ff0000">char</FONT><FONT FACE="Courier" SIZE=1>&#9;c = f.readChar();</P>
+<P ALIGN="JUSTIFY">&#9;&#9;System.err.println(</FONT><FONT FACE="Courier" SIZE=1 COLOR="#ff0000">"\nRead"</FONT><FONT FACE="Courier" SIZE=1>);</P>
+<P ALIGN="JUSTIFY">&#9;&#9;System.err.println(</FONT><FONT FACE="Courier" SIZE=1 COLOR="#ff0000">"Boolean: "</FONT><FONT FACE="Courier" SIZE=1> + ((b) ? </FONT><FONT FACE="Courier" SIZE=1 COLOR="#ff0000">"True"</FONT><FONT FACE="Courier" SIZE=1> : </FONT><FONT FACE="Courier" SIZE=1 COLOR="#ff0000">"False"</FONT><FONT FACE="Courier" SIZE=1>));</P>
+<P ALIGN="JUSTIFY">&#9;&#9;System.err.println(</FONT><FONT FACE="Courier" SIZE=1 COLOR="#ff0000">"Word   is ["</FONT><FONT FACE="Courier" SIZE=1> + w + </FONT><FONT FACE="Courier" SIZE=1 COLOR="#ff0000">"]"</FONT><FONT FACE="Courier" SIZE=1>);</P>
+<P ALIGN="JUSTIFY">&#9;&#9;System.err.println(</FONT><FONT FACE="Courier" SIZE=1 COLOR="#ff0000">"Line 1 is ["</FONT><FONT FACE="Courier" SIZE=1> + l1+ </FONT><FONT FACE="Courier" SIZE=1 COLOR="#ff0000">"]"</FONT><FONT FACE="Courier" SIZE=1>);</P>
+<P ALIGN="JUSTIFY">&#9;&#9;System.err.println(</FONT><FONT FACE="Courier" SIZE=1 COLOR="#ff0000">"Line 2 is ["</FONT><FONT FACE="Courier" SIZE=1> + l2+ </FONT><FONT FACE="Courier" SIZE=1 COLOR="#ff0000">"]"</FONT><FONT FACE="Courier" SIZE=1>);</P>
+<P ALIGN="JUSTIFY">&#9;&#9;System.err.println(</FONT><FONT FACE="Courier" SIZE=1 COLOR="#ff0000">"double is ["</FONT><FONT FACE="Courier" SIZE=1> + d + </FONT><FONT FACE="Courier" SIZE=1 COLOR="#ff0000">"]"</FONT><FONT FACE="Courier" SIZE=1>);</P>
+<P ALIGN="JUSTIFY">&#9;&#9;System.err.println(</FONT><FONT FACE="Courier" SIZE=1 COLOR="#ff0000">"int    is ["</FONT><FONT FACE="Courier" SIZE=1> + i + </FONT><FONT FACE="Courier" SIZE=1 COLOR="#ff0000">"]"</FONT><FONT FACE="Courier" SIZE=1>);</P>
+<P ALIGN="JUSTIFY">&#9;&#9;System.err.println(</FONT><FONT FACE="Courier" SIZE=1 COLOR="#ff0000">"char   is ["</FONT><FONT FACE="Courier" SIZE=1> + c + </FONT><FONT FACE="Courier" SIZE=1 COLOR="#ff0000">"]"</FONT><FONT FACE="Courier" SIZE=1>);</P>
+<P ALIGN="JUSTIFY"></P>
+<P ALIGN="JUSTIFY">&#9;&#9;f.readInt();&#9;// generates end of file</P>
+<P ALIGN="JUSTIFY">&#9;&#9;}</P>
+<P ALIGN="JUSTIFY">&#9;</FONT><FONT FACE="Courier" SIZE=1 COLOR="#0000ff">catch</FONT><FONT FACE="Courier" SIZE=1> (EofX x)</P>
+<P ALIGN="JUSTIFY">&#9;&#9;{</P>
+<P ALIGN="JUSTIFY">&#9;&#9;System.err.println(</FONT><FONT FACE="Courier" SIZE=1 COLOR="#ff0000">"At End of File"</FONT><FONT FACE="Courier" SIZE=1>);</P>
+<P ALIGN="JUSTIFY">&#9;&#9;}</P>
+<P ALIGN="JUSTIFY">&#9;</FONT><FONT FACE="Courier" SIZE=1 COLOR="#0000ff">catch</FONT><FONT FACE="Courier" SIZE=1> (Exception x)</P>
+<P ALIGN="JUSTIFY">&#9;&#9;{</P>
+<P ALIGN="JUSTIFY">&#9;&#9;System.err.println(x.toString());</P>
+<P ALIGN="JUSTIFY">&#9;&#9;}</P>
+<P ALIGN="JUSTIFY">&#9;}</P>
+<P ALIGN="JUSTIFY"> }</P>
+</FONT><H2 ALIGN="CENTER">StringIn and StringOut</H2>
+<FONT SIZE=2><P ALIGN="JUSTIFY"></P>
+<P ALIGN="JUSTIFY">In these cases the input comes from a </FONT><FONT FACE="Courier New" SIZE=2>String</FONT><FONT SIZE=2> object, or is sent to a </FONT><FONT FACE="Courier New" SIZE=2>StringBuffer</FONT><FONT SIZE=2> object.</P>
+<P ALIGN="JUSTIFY"></P>
+<P ALIGN="JUSTIFY">In each case the appropriate </FONT><FONT FACE="Courier New" SIZE=2>String</FONT><FONT SIZE=2> must be provided as an argument to the constructor.</P>
+<P ALIGN="JUSTIFY"></P>
+</FONT><FONT FACE="Courier New" SIZE=2><P ALIGN="JUSTIFY">StringIn(String)</P>
+<P ALIGN="JUSTIFY">StringOut(StringBuffer)</P>
+</FONT><FONT SIZE=2><P ALIGN="JUSTIFY"></P>
+<P ALIGN="JUSTIFY">An </FONT><FONT FACE="Courier New" SIZE=2>EofX</FONT><FONT SIZE=2> object is thrown when the end of the </FONT><FONT FACE="Courier New" SIZE=2>String</FONT><FONT SIZE=2> is encountered with </FONT><FONT FACE="Courier New" SIZE=2>StringIn</FONT><FONT SIZE=2>.</P>
+<P ALIGN="JUSTIFY">Other error conditions produce error messages, in a similar way to the </FONT><FONT FACE="Courier New" SIZE=2>File</FONT><FONT SIZE=2> classes.</P>
+<P ALIGN="JUSTIFY"></P>
+<P ALIGN="JUSTIFY">&nbsp;</P>
+</FONT><H2 ALIGN="CENTER">StandardIn and StandardOut</H2>
+<FONT SIZE=2><P ALIGN="JUSTIFY"></P>
+<P ALIGN="JUSTIFY">In these cases the input comes from the standard input </FONT><FONT FACE="Courier New" SIZE=2>System.in</FONT><FONT SIZE=2>, or is sent to the standard output </FONT><FONT FACE="Courier New" SIZE=2>System.out</FONT><FONT SIZE=2>.</P>
+<P ALIGN="JUSTIFY"></P>
+<P ALIGN="JUSTIFY">The constructors do not need any arguments.</P>
+<P ALIGN="JUSTIFY"></P>
+</FONT><FONT FACE="Courier New" SIZE=2><P ALIGN="JUSTIFY">StandardIn()</P>
+<P ALIGN="JUSTIFY">StandardOut()</P>
+</FONT><FONT SIZE=2><P ALIGN="JUSTIFY"></P>
+<P ALIGN="JUSTIFY">An </FONT><FONT FACE="Courier New" SIZE=2>EofX</FONT><FONT SIZE=2> object is thrown when the end of the </FONT><FONT FACE="Courier New" SIZE=2>System.in</FONT><FONT SIZE=2> is.</P>
+<P ALIGN="JUSTIFY">Other error conditions produce error messages, in a similar way to the </FONT><FONT FACE="Courier New" SIZE=2>File</FONT><FONT SIZE=2> classes.</P>
+<P ALIGN="JUSTIFY">&nbsp;</P>
+</FONT><H2 ALIGN="CENTER">&nbsp;</H2>
+<H2 ALIGN="CENTER">FormatInput</H2>
+<FONT SIZE=2><P ALIGN="JUSTIFY"></P>
+<P ALIGN="JUSTIFY">The </FONT><FONT FACE="Courier New" SIZE=2>FormatInput</FONT><FONT SIZE=2> interface supports formatted input and conforms to the </FONT><FONT FACE="Courier New" SIZE=2>DataInput</FONT><FONT SIZE=2> style of naming methods.  The following three methods are straightforward in that they skip initial white space (space, tab or newline characters) and then return an object of the appropriate type.  </FONT><FONT FACE="Courier New" SIZE=2>readInt</FONT><FONT SIZE=2> and </FONT><FONT FACE="Courier New" SIZE=2>readDouble</FONT><FONT SIZE=2> are terminated by the next non numeric character while </FONT><FONT FACE="Courier New" SIZE=2>readBoolean</FONT><FONT SIZE=2> is terminated by the next white space character.</P>
+<P ALIGN="JUSTIFY"></P>
+</FONT><FONT FACE="Courier New" SIZE=2><P ALIGN="JUSTIFY">boolean readBoolean();</P>
+<P ALIGN="JUSTIFY">double  readDouble();</P>
+<P ALIGN="JUSTIFY">int     readInt();</P>
+<P ALIGN="JUSTIFY"></P>
+</FONT><FONT SIZE=2><P ALIGN="JUSTIFY">These three methods will throw an </FONT><FONT FACE="Courier New" SIZE=2>EofX</FONT><FONT SIZE=2> exception on an attempt to read past end of file, and a </FONT><FONT FACE="Courier New" SIZE=2>NFX</FONT><FONT SIZE=2> exception for number format exception, for example reading an </FONT><FONT FACE="Courier New" SIZE=2>int</FONT><FONT SIZE=2> when the input is </FONT><FONT FACE="Courier New" SIZE=2>&quot;ron&quot;</FONT><FONT SIZE=2> or reading a </FONT><FONT FACE="Courier New" SIZE=2>boolean</FONT><FONT SIZE=2> when the input is not </FONT><FONT FACE="Courier New" SIZE=2>&quot;true&quot;</FONT><FONT SIZE=2> or </FONT><FONT FACE="Courier New" SIZE=2>&quot;false&quot;</FONT><FONT SIZE=2>.  The derived classes such as </FONT><FONT FACE="Courier New" SIZE=2>Console</FONT><FONT SIZE=2> or </FONT><FONT FACE="Courier New" SIZE=2>FileIn</FONT><FONT SIZE=2> may choose to catch these exceptions themselves and handle them in their own way.</P>
+<P ALIGN="JUSTIFY"></P>
+<P ALIGN="JUSTIFY">There are several different ways of reading characters and strings, basically depending on whether we want to skip initial white space or not, or whether a string is terminated by white space or not.  The convention is that </FONT><FONT FACE="Courier New" SIZE=2>read</FONT><FONT SIZE=2> means skip initial white space, while </FONT><FONT FACE="Courier New" SIZE=2>get</FONT><FONT SIZE=2> means don’t skip initial white space.  Also a </FONT><FONT FACE="Courier New" SIZE=2>Word</FONT><FONT SIZE=2> is terminated by the next white space character and </FONT><FONT FACE="Courier New" SIZE=2>Line</FONT><FONT SIZE=2> is terminated by a newline character.  This leads to the following five methods.</P>
+<P ALIGN="JUSTIFY"></P>
+</FONT><FONT FACE="Courier New" SIZE=2><P ALIGN="JUSTIFY">char    readChar(); // skip initial white space</P>
+<P ALIGN="JUSTIFY">char    getChar();  // do not skip initial white space</P>
+<P ALIGN="JUSTIFY"></P>
+<P ALIGN="JUSTIFY">String  readWord(); // skip initial white space, stop at next white space</P>
+<P ALIGN="JUSTIFY">String  readLine(); // skip initial white space, reads line and newline</P>
+<P ALIGN="JUSTIFY">String  getLine();  // reads initial white space, line and newline</P>
+<P ALIGN="JUSTIFY"></P>
+<P ALIGN="JUSTIFY">readLine</FONT><FONT SIZE=2> will read past the next newline, but does not return the newline character in the String, while </FONT><FONT FACE="Courier New" SIZE=2>getLine</FONT><FONT SIZE=2> will return the initial white space and the terminating newline character as well.  All of these methods throw an </FONT><FONT FACE="Courier New" SIZE=2>EofX</FONT><FONT SIZE=2> exception when appropriate.</P>
+</FONT><FONT FACE="Courier New" SIZE=2><P ALIGN="JUSTIFY"></P>
+</FONT><FONT SIZE=2><P ALIGN="JUSTIFY">Finally, we can ignore the rest of the line, including the newline, with</P>
+</FONT><FONT FACE="Courier New" SIZE=2><P ALIGN="JUSTIFY"></P>
+<P ALIGN="JUSTIFY">void    skipLine();</P>
+<P ALIGN="JUSTIFY"></P>
+</FONT><FONT SIZE=2><P ALIGN="JUSTIFY">which also throws </FONT><FONT FACE="Courier New" SIZE=2>EofX</FONT><FONT SIZE=2> when appropriate.</P>
+<P ALIGN="JUSTIFY">&nbsp;</P>
+</FONT><H2 ALIGN="CENTER">&nbsp;</H2>
+<H2 ALIGN="CENTER">FormatOutput</H2>
+<FONT SIZE=2><P ALIGN="JUSTIFY"></P>
+<P ALIGN="JUSTIFY">The </FONT><FONT FACE="Courier New" SIZE=2>FormatOutput</FONT><FONT SIZE=2> interface provides methods to format the output of all the usual types.  It supports the setting of field width, fill character, justification style and precision for real numbers.  The method names conform to both the </FONT><FONT FACE="Courier New" SIZE=2>DataOutput</FONT><FONT SIZE=2> or </FONT><FONT FACE="Courier New" SIZE=2>PrintStream</FONT><FONT SIZE=2> styles.  All the </FONT><FONT FACE="Courier New" SIZE=2>PrintStream</FONT><FONT SIZE=2> style methods have an alternative </FONT><FONT FACE="Courier New" SIZE=2>println</FONT><FONT SIZE=2> version that appends a newline to the end of their output.</P>
+<P ALIGN="JUSTIFY"></P>
+<P ALIGN="JUSTIFY">This means that there are a large number of similar methods, and so I will compress their description by introducing a default parameter notation.  The default values in each case are:</P>
+<P ALIGN="JUSTIFY"></P>
+</FONT><FONT FACE="Courier New" SIZE=2><P ALIGN="JUSTIFY">Width = 0</FONT><FONT SIZE=2>, which means use as many characters as necessary.  If a non-zero value such as 10 is provided then 10 output characters will be used, even for a shorter number such as 42.  The extra space is padded with fill characters.  If more than 10 characters are required, then just enough characters will be used, so that no output is lost.</P>
+<P ALIGN="JUSTIFY"></P>
+</FONT><FONT FACE="Courier New" SIZE=2><P ALIGN="JUSTIFY">Precision = 4</FONT><FONT SIZE=2>.  This is only used with </FONT><FONT FACE="Courier New" SIZE=2>double</FONT><FONT SIZE=2> values and is the number of digits after the decimal place.</P>
+<P ALIGN="JUSTIFY"></P>
+</FONT><FONT FACE="Courier New" SIZE=2><P ALIGN="JUSTIFY">Fill = ‘ ‘</FONT><FONT SIZE=2>.  This is the padding character used when the output value has fewer characters than the field width.  A value of </FONT><FONT FACE="Courier New" SIZE=2>‘0’</FONT><FONT SIZE=2> can be useful for dates and times.</P>
+<P ALIGN="JUSTIFY"></P>
+</FONT><FONT FACE="Courier New" SIZE=2><P ALIGN="JUSTIFY">Justification style = RIGHT</FONT><FONT SIZE=2> for numbers and </FONT><FONT FACE="Courier New" SIZE=2>LEFT</FONT><FONT SIZE=2> for strings.  In the numeric case the number appears in the right of the output, with fill characters in the left.  Possible user supplied values are </FONT><FONT FACE="Courier New" SIZE=2>Format.RIGHT</FONT><FONT SIZE=2>, </FONT><FONT FACE="Courier New" SIZE=2>Format.LEFT</FONT><FONT SIZE=2> and </FONT><FONT FACE="Courier New" SIZE=2>Format.CENTER</FONT><FONT SIZE=2>.</P>
+<P ALIGN="JUSTIFY"></P>
+<P ALIGN="JUSTIFY">The default parameter notationis used is illustrated by the following example to print a </FONT><FONT FACE="Courier New" SIZE=2>double</FONT><FONT SIZE=2>:</P>
+</FONT><FONT FACE="Courier New" SIZE=2><P ALIGN="JUSTIFY">void print(double,int width=0,int precision=4,int fill=’ ‘,int style=RIGHT);</P>
+</FONT><FONT SIZE=2><P ALIGN="JUSTIFY"></P>
+<P ALIGN="JUSTIFY">We provide as many parameters as are necessary, with default values being given to the rest.  For example:</P>
+<P ALIGN="JUSTIFY"></P>
+</FONT><FONT FACE="Courier New" SIZE=2><P ALIGN="JUSTIFY">con.print(x);</P>
+<P ALIGN="JUSTIFY">con.print(x, 6);</P>
+<P ALIGN="JUSTIFY">con.print(x, 6, 2);</P>
+<P ALIGN="JUSTIFY">con.print(x, 6, 2, ‘0’);</P>
+<P ALIGN="JUSTIFY">con.print(x, 6, 2, ‘0’, Format.CENTER);</P>
+<P ALIGN="JUSTIFY"></P>
+</FONT><B><U><FONT FACE="Courier New" SIZE=4><P ALIGN="JUSTIFY">PrintStream</FONT><FONT SIZE=4> Style</P>
+</B></U></FONT><FONT SIZE=2><P ALIGN="JUSTIFY"></P>
+</FONT><FONT FACE="Courier New" SIZE=2><P ALIGN="JUSTIFY">void print(boolean,int width=0,int fill=’ ‘,int style=LEFT);</P>
+<P ALIGN="JUSTIFY">void print(double, int width=0,int precision=4,int fill=’ ‘,int style=RIGHT);</P>
+<P ALIGN="JUSTIFY">void print(int   , int width=0,int fill=’ ‘,int style=RIGHT);</P>
+<P ALIGN="JUSTIFY">void print(char  , int width=0,int fill=’ ‘,int style=LEFT);</P>
+<P ALIGN="JUSTIFY">void print(String, int width=0,int fill=’ ‘,int style=LEFT);</P>
+</FONT><FONT SIZE=2><P ALIGN="JUSTIFY">All of these methods have a </FONT><FONT FACE="Courier New" SIZE=2>println</FONT><FONT SIZE=2> version as well.</P>
+<P ALIGN="JUSTIFY"></P>
+</FONT><B><U><FONT FACE="Courier New" SIZE=4><P ALIGN="JUSTIFY">DataOutput</FONT><FONT SIZE=4> Style</P>
+</B></U></FONT><FONT SIZE=2><P ALIGN="JUSTIFY"></P>
+</FONT><FONT FACE="Courier New" SIZE=2><P ALIGN="JUSTIFY">void writeBoolean(boolean,int width=0,int fill=’ ‘,int style=LEFT);</P>
+<P ALIGN="JUSTIFY">void writeDouble (double, int width=0,int precision=4,int fill=’ ‘,</P>
+<P ALIGN="JUSTIFY">                                                   int style=RIGHT);</P>
+<P ALIGN="JUSTIFY">void writeInt    (int   , int width=0,int fill=’ ‘,int style=RIGHT);</P>
+<P ALIGN="JUSTIFY">void writeChar   (char  , int width=0,int fill=’ ‘,int style=LEFT);</P>
+<P ALIGN="JUSTIFY">void writeString (String, int width=0,int fill=’ ‘,int style=LEFT);</P></FONT></BODY>
+</HTML>
