@@ -10,21 +10,22 @@ public class KPT {
 	private static FileReader fr = null;
 	private static FileWriter fw = null;
 	private static BufferedReader br = null;
-	private static String plaintextHex = "0x4368"; //
+	private static String plaintextHex = "0x4368"; // plaintext "Ch" as a hex number
 	private static int plaintextInt = Hex16.convert(plaintextHex);
 	private static int[] fullMessageInts;
+	private static int numLines = 101; //number of lines in the ciphertext file
+	private static String ctFile = "ct1.txt";
+	private static String outputFile = "ct1_h.txt";
 	
 	public static void main(String[] args) {
-		String[] ctArray = readCipherFile("ct1.txt");
+		String[] ctArray = readCipherFile(ctFile);
 		int[] ctInts = convertCipherHexToInts(ctArray);
 		int encryptionKey = findKey(ctInts);
 		fullMessageInts = decryptFullMessage(ctInts, encryptionKey);
 		String[] hexMessage = convertMessageIntsToHex(); 
 		System.out.println("Key Found: " + encryptionKey);
-		System.out.println(Arrays.toString(fullMessageInts));
-		System.out.println(Arrays.toString(hexMessage));
 		try {
-			fw = new FileWriter("ct1_h.txt");
+			fw = new FileWriter(outputFile);
 			for(int i=0;i<hexMessage.length;i++) {
 				fw.write(hexMessage[i]);
 				fw.write("\n");
@@ -46,7 +47,7 @@ public class KPT {
 	// read the hex values in from the first ciphertext file
 	public static String[] readCipherFile(String filepath) {
 		String ciphertextHex = ""; //need to read it in from a file
-		String[] ciphertextArray = new String[101]; //array of strings to hold each line of the ciphertext file (there are 101 lines)
+		String[] ciphertextArray = new String[numLines]; //array of strings to hold each line of the ciphertext file (there are 101 lines)
 		int ctArraySize = 0; //size of the ciphertext hex numbers array
 		
 		try {
@@ -76,7 +77,7 @@ public class KPT {
 	
 	// convert each line of hexadecimal ciphertext to an int 
 	public static int[] convertCipherHexToInts(String[] hexArray) {
-		int[] ciphertextInts = new int[101];
+		int[] ciphertextInts = new int[numLines];
 		
 		for(int i=0;i<hexArray.length;i++) { 
 			ciphertextInts[i] = Hex16.convert(hexArray[i]);
@@ -113,8 +114,7 @@ public class KPT {
 	public static String[] convertMessageIntsToHex() {
 		String[] fullMessageAsHex = new String[fullMessageInts.length];
 		for(int i=0;i<fullMessageInts.length;i++) {
-			fullMessageAsHex[i] = Integer.toHexString(fullMessageInts[i]);
-			fullMessageAsHex[i] = "0x" + fullMessageAsHex[i];
+			fullMessageAsHex[i] = String.format("0x%04x", fullMessageInts[i]);
 		}
 		return fullMessageAsHex;
 	}

@@ -12,55 +12,25 @@ public class CTO {
 	private static FileReader fr = null;
 	private static FileWriter fw = null;
 	private static BufferedReader br = null;
-	private static String plaintextHex1 = "0x6573"; //"at" 
-	private static String plaintextHex2 = "0x696e"; //"in"
-	private static String plaintextHex3 = "0x7468"; //"th" 
-	private static int plaintextInt1 = Hex16.convert(plaintextHex1);
-	private static int plaintextInt2 = Hex16.convert(plaintextHex2);
-	private static int plaintextInt3 = Hex16.convert(plaintextHex3);
 	private static int[] fullMessageInts;
+	private static int numLines = 31; //number of lines in the ciphertext file
+	private static String ctFile = "ct2.txt";
+	private static String outputFile = "ct2_h.txt";
 	
 	public static void main(String[] args) {
-		String[] ctArray = readCipherFile("ct2.txt");
+		String[] ctArray = readCipherFile(ctFile);
 		int[] ctInts = convertCipherHexToInts(ctArray);
-		int[] possibleKeys1 = findPossibleKeys(ctInts, plaintextInt1);
-		int[] possibleKeys2 = findPossibleKeys(ctInts, plaintextInt2);
-		int[] possibleKeys3 = findPossibleKeys(ctInts, plaintextInt3);
-		String[] hexMessage = new String[31];
-//		for(int i=0;i<possibleKeys1.length;i++) {
-//			fullMessageInts = decryptFullMessage(ctInts, possibleKeys1[i]);
-//
-//			hexMessage = convertMessageIntsToHex();
-//			System.out.println(i + ": Message: " + Arrays.toString(hexMessage) + "\n");
-//			writePossibleMessageToFile(hexMessage);
-//		}	
-//		System.out.println(Arrays.toString(possibleKeys1));
-//		System.out.println(Arrays.toString(possibleKeys2));
-//		System.out.println(Arrays.toString(possibleKeys3));
-		
-		for(int i=0;i<possibleKeys2.length;i++) {
-			fullMessageInts = decryptFullMessage(ctInts, possibleKeys2[i]);
+		String[] hexMessage = new String[numLines]; //decrypt the first five lines
+		for(int i=0;i<65536;i++) {
+			fullMessageInts = decryptFullMessage(ctInts, i);
 			hexMessage = convertMessageIntsToHex();
-			System.out.println(Arrays.toString(hexMessage));
 			writePossibleMessageToFile(hexMessage);
 		}
-		
-//		for(int i=0;i<possibleKeys2.length;i++) {
-//			for(int j=0;j<possibleKeys3.length;j++) {
-//				int key = 0;
-//				if(possibleKeys2[i] == possibleKeys3[j]) {
-//					key = possibleKeys2[i];
-//					System.out.println(key);
-//				}else {			
-////					System.out.println("No match found");
-//				}
-//			}				
-//		}
 	}
 	
 	public static void writePossibleMessageToFile(String[] possibleHexMessage) {
 		try {
-			fw = new FileWriter("ct2_h.txt", true);
+			fw = new FileWriter(outputFile, true);
 			for(int i=0;i<possibleHexMessage.length;i++) {
 				fw.write(possibleHexMessage[i]);
 				fw.write("\n");	
@@ -76,37 +46,12 @@ public class CTO {
 				}
 			}
 		}
-
-//		System.out.println(Arrays.toString(possibleKeys));
-
- 
-//		System.out.println("Key Found: " + encryptionKey);
-//		System.out.println(Arrays.toString(fullMessageInts));
-//		System.out.println(Arrays.toString(hexMessage));
-//		try {
-//			fw = new FileWriter("ct1_h.txt");
-//			for(int i=0;i<hexMessage.length;i++) {
-//				fw.write(hexMessage[i]);
-//				fw.write("\n");
-//			}		
-//		}catch(IOException e) {
-//			e.printStackTrace();
-//		}finally {
-//			if(fw!=null) {
-//				try {
-//					fw.close();  //close the file
-//				}catch(IOException e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		}
 	}
-	
 	
 	// read the hex values in from the first ciphertext file
 	public static String[] readCipherFile(String filepath) {
 		String ciphertextHex = ""; //need to read it in from a file
-		String[] ciphertextArray = new String[31]; //array of strings to hold each line of the ciphertext file (there are 31 lines)
+		String[] ciphertextArray = new String[numLines]; //array of strings to hold each line of the ciphertext file (there are 31 lines)
 		int ctArraySize = 0; //size of the ciphertext hex numbers array
 		
 		try {
@@ -136,7 +81,7 @@ public class CTO {
 	
 	// convert each line of hexadecimal ciphertext to an int 
 	public static int[] convertCipherHexToInts(String[] hexArray) {
-		int[] ciphertextInts = new int[31];
+		int[] ciphertextInts = new int[numLines];
 		
 		for(int i=0;i<hexArray.length;i++) { 
 			ciphertextInts[i] = Hex16.convert(hexArray[i]);
@@ -183,11 +128,15 @@ public class CTO {
 	public static String[] convertMessageIntsToHex() {
 		String[] fullMessageAsHex = new String[fullMessageInts.length];
 		for(int i=0;i<fullMessageInts.length;i++) {
-			fullMessageAsHex[i] = Integer.toHexString(fullMessageInts[i]);
-			fullMessageAsHex[i] = String.format("0x" + fullMessageAsHex[i]);
-			if(fullMessageAsHex[i].length() < 6) {
-				fullMessageAsHex[i] = fullMessageAsHex[i] + "0";
-			}
+			//fullMessageAsHex[i] = Integer.toHexString(fullMessageInts[i]);
+			fullMessageAsHex[i] = String.format("0x%04x", fullMessageInts[i]);
+//			if(fullMessageAsHex[i].length() == 5) {
+//				fullMessageAsHex[i] = fullMessageAsHex[i] + "0";
+//			}else if(fullMessageAsHex[i].length() == 4) {
+//				fullMessageAsHex[i] = fullMessageAsHex[i] + "00";
+//			}else if(fullMessageAsHex[i].length() == 3) {
+//				fullMessageAsHex[i] = fullMessageAsHex[i] + "000";
+//			}
 		}
 		return fullMessageAsHex;
 	}
